@@ -1,0 +1,165 @@
+//Staff stylesheets
+.home{
+  .title{
+    font-size: 40px;
+  }
+  .img-container{
+    padding: 50px 20px;
+    @media (max-width: 850px) {
+      padding: 50px 5px;
+    }
+  }
+  img{
+    width: 600px;
+    opacity: 0.8;
+    @media (max-width: 850px) {
+      width: 100%;
+    }
+  }
+}
+
+path.active-note {
+  animation-duration: 500ms;
+  animation-name: blink;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+@keyframes blink {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.1;
+  }
+}
+
+// Piano stylesheet
+.interactive-piano__piano-container {
+  display: inline-flex;
+  box-sizing: border-box;
+  border-top: 10px solid #ed5276;
+  position: relative;
+  margin: auto;
+}
+
+.interactive-piano__piano-container::after {
+  content: '';
+  width: 100%;
+  height: 5px;
+  background-color: rgba(68, 68, 68, 0.1);
+  position: absolute;
+  top: 0;
+}
+
+.interactive-piano__accidental-key__wrapper {
+  position: relative;
+  width: 0;
+}
+
+.interactive-piano__accidental-key {
+  position: absolute;
+  transform: translateX(-50%);
+  cursor: pointer;
+  background: #444;
+  width: 36px;
+  height: 120px;
+  border-radius: 0px 0px 3px 3px;
+  border: 3px solid #444;
+  border-top: none;
+  box-sizing: border-box;
+  padding: 5px;
+  outline: none;
+  color: #dbdbdb;
+}
+
+.interactive-piano__accidental-key--playing {
+  background: #ed5276;
+  color: #fff;
+}
+
+.interactive-piano__natural-key {
+  cursor: pointer;
+  background: #fafafa;
+  width: 50px;
+  height: 180px;
+  margin: 0 2px;
+  border-radius: 0 0 3px 3px;
+  border: none;
+  padding: 10px;
+  outline: none;
+  box-sizing: border-box;
+  color: #444;
+}
+
+.interactive-piano__natural-key--playing {
+  border-bottom: 10px solid #ed5276;
+  color: #ed5276;
+}
+
+.interactive-piano__natural-key:first-of-type {
+  margin-left: 0;
+}
+
+.interactive-piano__natural-key:last-of-type {
+  margin-right: 0;
+}
+
+.interactive-piano__text {
+  pointer-events: none;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+div.ReactPiano__NoteLabelContainer{
+  width: 10px;
+  height: 10px;
+  border-radius: 0 0 3px 3px;
+}
+
+.ReactPiano__Key--Primary div.ReactPiano__NoteLabelContainer{
+  background-color: #007BFF;
+}
+
+.ReactPiano__Key--Success div.ReactPiano__NoteLabelContainer{
+  background-color: #28A745;
+}
+
+.ReactPiano__Key--Warning div.ReactPiano__NoteLabelContainer{
+  background-color: #FFC107;
+}
+
+.ReactPiano__Key--Danger div.ReactPiano__NoteLabelContainer{
+  background-color: #DC3545;
+}
+
+.instrument-switcher{
+  display: flex;
+  align-items: center;
+}
+
+//Fretboard stylesheet
+.fretboard {
+  position: relative;
+}
+.fretboard .tuning,
+.fretboard .fretnum {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  font-family: Helvetica;
+  text-transform: uppercase;
+}
+.fretboard .tuning {
+  font-size: 10px;
+}
+.fretboard .fretnum {
+  font-size: 8px;
+}
+
+
+.floating{
+  margin-top: 10px;
+}

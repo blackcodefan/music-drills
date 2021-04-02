@@ -1,0 +1,21 @@
+// Styles
+// CoreUI Icons Set
+@import '~@coreui/icons/css/all.min.css';
+// Import Font Awesome Icons Set
+@import '~font-awesome/css/font-awesome.min.css';
+// Import Simple Line Icons Set
+@import '~simple-line-icons/css/simple-line-icons.css';
+
+// Import styles with default layout.
+// If you are going to use dark layout please comment next line
+@import "~@coreui/coreui-pro/scss/coreui.scss";
+
+// Temp fix for reactstrap
+@import "~@coreui/coreui-pro/scss/_dropdown-menu-right.scss";
+
+// ie fixes
+@import "ie-fix";
+
+// Import Main styles for this application
+$spinkit-spinner-color: $body-color;
+@import '~spinkit/spinkit.min.css';

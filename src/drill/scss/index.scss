@@ -1,0 +1,29 @@
+// Import styles with default layout.
+
+// CoreUI Icons Set
+@import '~@coreui/icons/css/coreui-icons.css';
+// Import Font Awesome Icons Set
+@import '~font-awesome/css/font-awesome.min.css';
+// Import Simple Line Icons Set
+@import '~simple-line-icons/css/simple-line-icons.css';
+
+
+// If you are going to use dark layout please comment next line
+@import "~@coreui/coreui-pro/scss/coreui";
+
+// Import styles with dark layout
+// If you want to use dark layout uncomment next line
+//@import "~@coreui/coreui-pro/scss/themes/dark/coreui-dark.scss";
+
+// Temp fix for reactstrap
+@import "~@coreui/coreui-pro/scss/dropdown-menu-right";
+
+// If you want to add something do it here
+@import "custom";
+
+// ie fixes
+@import "ie-fix";
+
+// Spinkit
+$spinkit-spinner-color: $body-color;
+@import '~spinkit/scss/spinkit';
