@@ -279,10 +279,6 @@ export const Fretboard = function (config) {
       // for lefties, however the HTML elements we use for fret numbers and
       // tuning we transform by hand.
       let x = (i - instance.startFret) * instance.fretWidth + 1 + XMARGIN();
-      let fretNumX = x;
-      if (instance.leftHanded) {
-        fretNumX = instance.width - XMARGIN() - x;
-      }
       // fret
       instance.svgContainer
         .append("line")
@@ -297,20 +293,20 @@ export const Fretboard = function (config) {
 
   let drawStrings = function () {
     for (let i = instance.strings - 1; i >= 0; i --) {
-      for(let j = 0; j < instance.frets; j ++){
+      for(let j = -1; j < instance.frets; j ++){
           instance.svgContainer
               .append("line")
               .attr("x1", instance.fretWidth * (j + 1) + 1)
               .attr("y1", i * instance.fretHeight + 1 + YMARGIN())
               .attr("x2", instance.fretWidth * (j + 2) + 1)
               .attr("y2", i * instance.fretHeight + 1 + YMARGIN())
-              .attr("stroke", "black")
-              .attr("stroke-width", 1)
+              .attr("stroke", "#3C3F41")
+              .attr("stroke-width", 2)
               .on('mouseover', function () {
-                  d3.select(this).attr("stroke", "red").attr("stroke-width", 3);
+                  d3.select(this).attr("stroke", "red").attr("stroke-width", 5);
               })
               .on('mouseleave', function () {
-                  d3.select(this).attr("stroke", "black").attr("stroke-width", 1);
+                  d3.select(this).attr("stroke", "#3C3F41").attr("stroke-width", 2);
               })
               .on('click', function () {
                   config.onLineClick((instance.strings - i -1) * instance.frets + j, i + 1, j);
@@ -320,14 +316,14 @@ export const Fretboard = function (config) {
       }
     }
     let placeTuning = function (d, i) {
-      return (instance.strings - i) * instance.fretHeight - 4 + "px";
+      return (instance.strings - i) * instance.fretHeight + 4 + "px";
     };
 
     let toBaseFretNote = function (note) {
       return noteName(absNote(note) + instance.startFret);
     };
 
-    let hPosition = instance.leftHanded ? instance.width - XMARGIN() - 16 + "px" : "4px";
+    let hPosition = instance.leftHanded ? instance.width - XMARGIN() - 16 + "px" : "5px";
 
     d3.select("#" + id)
       .selectAll(".tuning")
@@ -415,17 +411,17 @@ export const Fretboard = function (config) {
       const circle = instance.svgContainer
         .append("circle")
         .attr("class", "note")
-        .attr("stroke-width", 1.5)
+        .attr("stroke-width", 3)
         // 0.75 is the offset into the fret (higher is closest to fret)
         .attr("cx", (absPitch - basePitch + 0.5) * instance.fretWidth)
         .attr("cy", (string - 1) * instance.fretHeight + 1 + YMARGIN())
-        .attr("r", 6)
+        .attr("r", 10)
         .style("stroke", actualColor)
         .style("fill", "white")
         .on("click", function () {
           this.setAttribute(
             "stroke-width",
-            4 - parseInt(this.getAttribute("stroke-width"))
+            8 - parseInt(this.getAttribute("stroke-width"))
           );
           config.onNoteClick(index, string);
         });

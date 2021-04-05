@@ -2,19 +2,6 @@ import React from 'react';
 import { Card, CardBody, CardHeader, CardFooter, Row, Col, Button, Alert } from 'reactstrap';
 import StaffVisualizer from "./component/staff_visualizer";
 
-const notes = [
-    [
-        {
-            note: 'a',
-            octave: 4
-        },
-        {
-            note: 'b',
-            octave: 4
-        }
-    ]
-];
-
 const ChordNameOnStaff = props =>{
     return <Card>
         <CardHeader>
@@ -23,7 +10,7 @@ const ChordNameOnStaff = props =>{
         <CardBody>
             <Row>
                 <Col md={4} sm={12}>
-                    <StaffVisualizer isEditable={false} notes={notes} isHarmony={true}/>
+                    <StaffVisualizer notes={[]} isHarmony={true}/>
                 </Col>
                 <Col md={8} sm={12}>
                     <Card className="border-primary">

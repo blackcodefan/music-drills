@@ -9,7 +9,7 @@ export const Notes = [
         accident: [],
         octave: 3,
         piano: 52,
-        guitar: [],
+        guitar: [6],
     },
     {
         index: 1,
@@ -49,7 +49,7 @@ export const Notes = [
         accident: [],
         octave: 3,
         piano: 57,
-        guitar: [6]
+        guitar: [6, 5]
     },
     {
         index: 6,
@@ -89,7 +89,7 @@ export const Notes = [
         accident: [],
         octave: 4,
         piano: 62,
-        guitar: [6, 5]
+        guitar: [6, 5, 4]
     },
     {
         index: 11,
@@ -129,7 +129,7 @@ export const Notes = [
         accident: [],
         octave: 4,
         piano: 67,
-        guitar: [5, 4]
+        guitar: [5, 4, 3]
     },
     {
         index: 16,
@@ -161,7 +161,7 @@ export const Notes = [
         accident: [],
         octave: 4,
         piano: 71,
-        guitar: [4, 3]
+        guitar: [4, 3, 2]
     },
     {
         index: 20,
@@ -201,7 +201,7 @@ export const Notes = [
         accident: [],
         octave: 5,
         piano: 76,
-        guitar: [3, 2]
+        guitar: [3, 2, 1]
     },
     {
         index: 25,
@@ -301,6 +301,93 @@ export const Notes = [
     }
 ];
 
+export const Intervals = [
+    {
+        index: 0,
+        fullName: 'Perfect 1st',
+        space: 0,
+        shortName: 'Perf. 1st'
+    },
+    {
+        index: 1,
+        fullName: 'Minor 2nd',
+        space: 1,
+        shortName: 'Min 2nd'
+    },
+    {
+        index: 2,
+        fullName: 'Major 2nd',
+        space: 2,
+        shortName: 'Maj 2nd'
+    },
+    {
+        index: 3,
+        fullName: 'Minor 3rd',
+        space: 3,
+        shortName: 'Min 3rd'
+    },
+    {
+        index: 4,
+        fullName: 'Major 3rd',
+        space: 4,
+        shortName: 'Maj 3rd'
+    },
+    {
+        index: 5,
+        fullName: 'Perfect 4th',
+        space: 5,
+        shortName: 'Perf. 4th'
+    },
+    {
+        index: 6,
+        fullName: 'Augmented 4th',
+        space: 6,
+        shortName: 'Aug. 4th'
+    },
+    {
+        index: 7,
+        fullName: 'Diminished 5th',
+        space: 6,
+        shortName: 'Dim. 5th'
+    },
+    {
+        index: 8,
+        fullName: 'Perfect 5th',
+        space: 7,
+        shortName: 'Perf. 5th'
+    },
+    {
+        index: 9,
+        fullName: 'Minor 6th',
+        space: 8,
+        shortName: 'Min 6th'
+    },
+    {
+        index: 10,
+        fullName: 'Maj 6th',
+        space: 9,
+        shortName: 'Maj 6th'
+    },
+    {
+        index: 11,
+        fullName: 'Minor 7th',
+        space: 10,
+        shortName: 'Min 7th'
+    },
+    {
+        index: 12,
+        fullName: 'Major 7th',
+        space: 11,
+        shortName: 'Maj 7th'
+    },
+    {
+        index: 13,
+        fullName: 'Perfect 8th',
+        space: 12,
+        shortName: 'Perf. 8th'
+    }
+];
+
 export const GuitarNoteArrangement = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
     6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
@@ -311,28 +398,28 @@ export const GuitarNoteArrangement = [
 ];
 
 export const StaffNoteArrangement = {
-    165: 0,
-    160: 1,
-    155: 3,
-    150: 5,
-    145: 7,
-    140: 8,
-    135: 10,
-    130: 12,
-    125: 13,
-    120: 15,
-    115: 17,
-    110: 19,
-    105: 20,
-    100: 22,
-    95: 24,
-    90: 25,
-    85: 27,
-    80: 29,
-    75: 31,
-    70: 32,
-    65: 34,
-    60: 36
+    22: 0,
+    21: 1,
+    20: 3,
+    19: 5,
+    18: 7,
+    17: 8,
+    16: 10,
+    15: 12,
+    14: 13,
+    13: 15,
+    12: 17,
+    11: 19,
+    10: 20,
+    9: 22,
+    8: 24,
+    7: 25,
+    6: 27,
+    5: 29,
+    4: 31,
+    3: 32,
+    2: 34,
+    1:36
 };
 
 export const getRandomNote = () =>{
@@ -340,4 +427,29 @@ export const getRandomNote = () =>{
     let note = Notes[index];
     let noteIndex = RandomInt(0, note.note.length - 1);
     return {index: index, noteIndex: noteIndex, color: 'black', readOnly: true};
+};
+
+export const getRandomInterval = () =>{
+    let index = RandomInt(1, Intervals.length - 1);
+    return Intervals[index];
+};
+
+export const getRandomNoteForInterval = (intervalSpace) =>{
+    let index = RandomInt(0, Notes.length - intervalSpace);
+    let note = Notes[index];
+    let noteIndex = RandomInt(0, note.note.length - 1);
+    return {index: index, noteIndex: noteIndex, color: 'black', readOnly: true};
+};
+
+export const getRandomNotesForInterval = (intervalSpace) =>{
+    let assignmentIndex = RandomInt(0, Notes.length - intervalSpace);
+    let assignmentNote = Notes[assignmentIndex];
+    let noteIndex = RandomInt(0, assignmentNote.note.length - 1);
+    let answerIndex = assignmentIndex + intervalSpace;
+    let answerNote = Notes[answerIndex];
+    let answerNoteIndex = RandomInt(0, answerNote.note.length - 1);
+    return [
+        {index: assignmentIndex, noteIndex: noteIndex, color: 'black', readOnly: true},
+        {index: answerIndex, noteIndex: answerNoteIndex, color: 'black', readOnly: true},
+    ];
 };

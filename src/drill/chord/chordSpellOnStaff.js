@@ -3,19 +3,6 @@ import { Card, CardBody, CardHeader, CardFooter, Row, Col, Button } from 'reacts
 import StaffVisualizer from './component/staff_visualizer';
 import Widget from "../component/widget";
 
-const notes = [
-    [
-        {
-            note: 'a',
-            octave: 4
-        },
-        {
-            note: 'b',
-            octave: 4
-        }
-    ]
-];
-
 const ChordSpellOnStaff = props =>{
     return <Card>
         <CardHeader>
@@ -41,7 +28,7 @@ const ChordSpellOnStaff = props =>{
                     </Card>
                 </Col>
                 <Col md={6} sm={12}>
-                    <StaffVisualizer isEditable={true} notes={notes} isHarmony={true}  isForAnswer={true}/>
+                    <StaffVisualizer notes={[]} isHarmony={true}/>
                 </Col>
             </Row>
         </CardBody>

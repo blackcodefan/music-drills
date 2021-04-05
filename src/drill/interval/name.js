@@ -1,14 +1,66 @@
-import React, {useState} from 'react';
-import { Card, CardBody, CardHeader, Row, Col, Button } from 'reactstrap';
+import React, {useContext, useState} from 'react';
+import { Card, CardBody, CardHeader, CardFooter, Row, Col, Button } from 'reactstrap';
 import StaffVisualizer from './component/staff_visualizer';
 import Instrument from './component/instrument';
-import {getRandomNote} from "../logic/source";
+import {getRandomInterval, getRandomNoteForInterval, getRandomNotesForInterval, Intervals} from "../logic/source";
+import {GameStateContext} from "../context";
+import ScoreBoard from "../component/score_board";
 
 const IntervalName = props =>{
 
-    const [assignment, setAssignment] = useState(getRandomNote());
-    const [answer, setAnswer] = useState([]);
-    const [status, setStatus] = useState(0);// 0:1:2 still thinking/correct/wrong
+    const answers = new Array(14);
+    answers.fill(0);
+
+    const {increaseCorrect, increaseIncorrect, startTimer, resetTimer} = useContext(GameStateContext);
+    const temp = getRandomInterval();
+    const [assignment, setAssignment] = useState(temp);
+    const [assignmentNotes, setAssignmentNotes] = useState(getRandomNotesForInterval(temp.space));
+    const [answer, setAnswer] = useState(answers);
+    const [status, setStatus] = useState(0);
+
+    const set = index =>{
+        let newAnswer = [...answers];
+        newAnswer[index] = 1;
+        setAnswer(newAnswer);
+    };
+
+    const checkAnswer = () =>{
+        let answerIndex = answer.indexOf(1);
+        let newAnswer = [...answers];
+        if(answerIndex === -1){
+            newAnswer[assignment.index] = 3;
+            setAnswer(newAnswer);
+            setStatus(2);
+            increaseIncorrect()
+        }else{
+            if(answerIndex === assignment.index){
+                newAnswer[assignment.index] = 2;
+                setAnswer(newAnswer);
+                setStatus(1);
+                increaseCorrect();
+            }else{
+                newAnswer[assignment.index] = 2;
+                newAnswer[answerIndex] = 3;
+                setAnswer(newAnswer);
+                setStatus(2);
+                increaseIncorrect();
+            }
+        }
+    };
+
+    const onSubmit = () =>{
+        startTimer();
+        if(status === 0) checkAnswer();
+        else{
+            resetTimer();
+            setAnswer([...answers]);
+            const temp = getRandomInterval();
+            setAssignment(temp);
+            setAssignmentNotes(getRandomNotesForInterval(temp.space));
+            setStatus(0);
+        }
+    };
+
 
     return <Card>
         <CardHeader>
@@ -17,10 +69,10 @@ const IntervalName = props =>{
         <CardBody>
             <Row>
                 <Col md={4} sm={12}>
-                    {/*<StaffVisualizer isEditable={false} notes={[assignment]} isHarmony={true}/>*/}
+                    <StaffVisualizer isEditable={false} notes={assignmentNotes} isHarmony={true}/>
                 </Col>
                 <Col md={8} sm={12}>
-                    {/*<Instrument notes={answer}/>*/}
+                    <Instrument notes={assignmentNotes}/>
                 </Col>
             </Row>
             <Row>
@@ -31,24 +83,38 @@ const IntervalName = props =>{
                         </CardHeader>
                         <CardBody>
                             <Row>
-                                <Col md={2} sm={3} xs={6}><Button color="primary" outline style={{marginBottom: '10px'}}>Min 2nd</Button></Col>
-                                <Col md={2} sm={3} xs={6}><Button color="primary" outline style={{marginBottom: '10px'}}>Maj 2nd</Button></Col>
-                                <Col md={2} sm={3} xs={6}><Button color="primary" outline style={{marginBottom: '10px'}}>Min 3rd</Button></Col>
-                                <Col md={2} sm={3} xs={6}><Button color="primary" outline style={{marginBottom: '10px'}}>Maj 3rd</Button></Col>
-                                <Col md={2} sm={3} xs={6}><Button color="primary" outline style={{marginBottom: '10px'}}>Perf. 4th</Button></Col>
-                                <Col md={2} sm={3} xs={6}><Button color="primary" outline style={{marginBottom: '10px'}}>Dim. 5th</Button></Col>
-                                <Col md={2} sm={3} xs={6}><Button color="primary" outline style={{marginBottom: '10px'}}>Perf. 5th</Button></Col>
-                                <Col md={2} sm={3} xs={6}><Button color="primary" outline style={{marginBottom: '10px'}}>Min 6th</Button></Col>
-                                <Col md={2} sm={3} xs={6}><Button color="primary" outline style={{marginBottom: '10px'}}>Maj 6th</Button></Col>
-                                <Col md={2} sm={3} xs={6}><Button color="primary" outline style={{marginBottom: '10px'}}>Min 7th</Button></Col>
-                                <Col md={2} sm={3} xs={6}><Button color="primary" outline style={{marginBottom: '10px'}}>Maj 7th</Button></Col>
-                                <Col md={2} sm={3} xs={6}><Button color="primary" outline style={{marginBottom: '10px'}}>Perf. 8th</Button></Col>
+                                {
+                                    Intervals.map(interval => (
+                                        <Col md={2} sm={3} xs={6} key={interval.index}>
+                                            <Button
+                                                color={answer[interval.index] === 0 || answer[interval.index] === 1?"primary":answer[interval.index] === 2?"success":"danger"}
+                                                outline={answer[interval.index] !== 1}
+                                                style={{marginBottom: '10px'}}
+                                                onClick={() => set(interval.index)}>
+                                                {interval.shortName}
+                                                </Button>
+                                        </Col>
+                                    ))
+                                }
                             </Row>
                         </CardBody>
+                        <CardFooter className="text-center">
+                            <Button color={
+                                status === 0?
+                                    "primary":status === 1?
+                                    "success":"danger"} onClick={onSubmit}>
+                                {
+                                    status === 0?'Answer':'Next'
+                                }
+                            </Button>
+                        </CardFooter>
                     </Card>
                 </Col>
             </Row>
         </CardBody>
+        <CardFooter className="text-center">
+            <ScoreBoard/>
+        </CardFooter>
     </Card>;
 };
 

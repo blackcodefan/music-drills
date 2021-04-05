@@ -1,17 +1,21 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import { Card, CardBody, CardHeader, CardFooter, Row, Col } from 'reactstrap';
+import ScoreBoard from '../component/score_board';
 import StaffVisualizer from './component/staff_visualizer';
 import Instrument from './component/instrument';
 import {Notes, getRandomNote, RandomInt} from '../logic/source';
+import {GameStateContext} from "../context";
 
 const NoteInstrument = props =>{
+
+    const {increaseCorrect, increaseIncorrect, startTimer, resetTimer} = useContext(GameStateContext);
 
     const [assignment, setAssignment] = useState(getRandomNote());
     const [answer, setAnswer] = useState([]);
     const [status, setStatus] = useState(0);// 0:1:2 still thinking/correct/wrong
 
     const onStaffTap = note =>{
-        if(note.index !== 0 && status === 0){
+        if(status === 0){
             setAnswer([note]);
         }
     };
@@ -120,12 +124,13 @@ const NoteInstrument = props =>{
 
             setStatus(2);
             setAnswer([correctionAnswer]);
+            increaseIncorrect();
         }else{
             if(answer[0].index === assignment.index){
 
                 let correctionAnswer = {
-                    index: assignment.index,
-                    noteIndex: 0,
+                    index: answer[0].index,
+                    noteIndex: answer[0].noteIndex,
                     color: 'green',
                     string: note.guitar[RandomInt(0, note.guitar.length - 1)],
                     readOnly: true
@@ -133,6 +138,7 @@ const NoteInstrument = props =>{
 
                 setStatus(1);
                 setAnswer([correctionAnswer]);
+                increaseCorrect();
             }
             else{
                 let correctionAnswers = [{...answer[0], color: 'red'}];
@@ -145,13 +151,16 @@ const NoteInstrument = props =>{
                 });
                 setStatus(2);
                 setAnswer(correctionAnswers);
+                increaseIncorrect();
             }
         }
     };
 
     const onSubmit = () =>{
+        startTimer();
         if(status === 0) checkAnswer();
         else{
+            resetTimer();
             setAnswer([]);
             setAssignment(getRandomNote());
             setStatus(0);
@@ -183,14 +192,7 @@ const NoteInstrument = props =>{
             </Row>
         </CardBody>
         <CardFooter className="text-center">
-            <Row>
-                <Col md={4} sm={6} xs={6} className="text-success">Correct: 0</Col>
-                <Col md={4} sm={6} xs={6} className="text-primary">Avg Time: 0:00</Col>
-                <Col md={4} sm={6} xs={6} className="text-primary">Crt.answ. time: 0:00</Col>
-                <Col md={4} sm={6} xs={6} className="text-danger">Incorrect: 0</Col>
-                <Col md={4} sm={6} xs={6} className="text-primary">Last Answer: 0:00</Col>
-                <Col md={4} sm={6} xs={6} className="text-primary">Total time: 0:00</Col>
-            </Row>
+            <ScoreBoard/>
         </CardFooter>
     </Card>;
 };

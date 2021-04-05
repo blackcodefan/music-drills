@@ -1,20 +1,8 @@
 import React from 'react';
-import { Card, CardBody, CardHeader, CardFooter, Row, Col, Button, Alert } from 'reactstrap';
+import { Card, CardBody, CardHeader, CardFooter, Row, Col, Button } from 'reactstrap';
 import Widget from '../component/widget';
 import Instrument from "./component/instrument";
-
-const notes = [
-    [
-        {
-            note: 'a',
-            octave: 4
-        },
-        {
-            note: 'b',
-            octave: 4
-        }
-    ]
-];
+import ScoreBoard from "../component/score_board";
 
 const ScaleSpellOnInstrument = props =>{
     return <Card>
@@ -41,19 +29,12 @@ const ScaleSpellOnInstrument = props =>{
                     </Card>
                 </Col>
                 <Col  md={8} sm={12}>
-                    <Instrument notes={notes} isForAnswer={true}/>
+                    <Instrument notes={[]} isForAnswer={true}/>
                 </Col>
             </Row>
         </CardBody>
         <CardFooter className="text-center">
-            <Row>
-                <Col md={4} sm={6} xs={6} className="text-success">Correct: 0</Col>
-                <Col md={4} sm={6} xs={6} className="text-primary">Avg Time: 0:00</Col>
-                <Col md={4} sm={6} xs={6} className="text-primary">Crt.answ. time: 0:00</Col>
-                <Col md={4} sm={6} xs={6} className="text-danger">Incorrect: 0</Col>
-                <Col md={4} sm={6} xs={6} className="text-primary">Last Answer: 0:00</Col>
-                <Col md={4} sm={6} xs={6} className="text-primary">Total time: 0:00</Col>
-            </Row>
+            <ScoreBoard/>
         </CardFooter>
     </Card>;
 };

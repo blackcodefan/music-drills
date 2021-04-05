@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import { CardHeader, CardBody, Card, CardFooter, Button } from "reactstrap";
 import { AppSwitch } from '@coreui/react'
 import CustomPiano from '../../component/piano';
@@ -41,7 +41,7 @@ const Instrument = props =>{
 
     const notes = getNotes(props.notes);
     const guitar = transferToGuitarFormat(notes);
-    const [piano, chooseInstrument] = useState(true);
+    const [piano, chooseInstrument] = useState(false);
 
     const pianoStrike = miniNumber =>{
 
@@ -59,8 +59,29 @@ const Instrument = props =>{
     };
 
     const onGuitarLineClick = (midiIndex, stringIndex, termIndex) =>{
+        let index;
+        if(termIndex !== -1){
+            index = GuitarNoteArrangement[midiIndex];
 
-        let index = GuitarNoteArrangement[midiIndex];
+        }else{
+
+            switch (stringIndex) {
+                case 6:
+                    index = 0;break;
+                case 5:
+                    index = 5;break;
+                case 4:
+                    index = 10;break;
+                case 3:
+                    index = 15;break;
+                case 2:
+                    index = 19;break;
+                case 1:
+                    index = 24;break;
+                default:
+                    index = 0;break;
+            }
+        }
 
         !!props.onNoteSelect?
             props.onNoteSelect({
@@ -89,7 +110,7 @@ const Instrument = props =>{
             <div className="card-header-actions instrument-switcher">
                 <strong>Piano</strong>
                 <AppSwitch className={'mx-1'} color={'success'} label
-                           checked dataOn={'P'}
+                           dataOn={'P'}
                            dataOff={'G'}
                            onChange={e => chooseInstrument(e.target.checked)}/>
                 <strong>Guitar</strong>

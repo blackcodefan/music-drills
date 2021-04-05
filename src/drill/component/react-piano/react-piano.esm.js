@@ -480,7 +480,6 @@ function (_React$Component) {
         }
       }, this.getMidiNumbers().map(function (midiNumber) {
         var _MidiNumbers$getAttri2 = MidiNumbers.getAttributes(midiNumber),
-            note = _MidiNumbers$getAttri2.note,
             isAccidental = _MidiNumbers$getAttri2.isAccidental;
 
         let isActive = !_this.props.disabled && _this.props.activeNotes.includes(midiNumber);
@@ -488,7 +487,7 @@ function (_React$Component) {
 
         let className = 'Default';
         if(notes.length > 0){
-          let black= 0, green= 0, yellow=0, red = 0;
+          let black= 0, green= 0, red = 0;
           notes.forEach(element =>{
             switch (element.color) {
                 case 'black':
@@ -497,8 +496,8 @@ function (_React$Component) {
                   green++;break;
                 case 'red':
                   red++;break;
-                case 'yellow':
-                  yellow++;break;
+                default:
+                  break;
             }
           });
           if(black > 0) className = 'Primary';
@@ -804,7 +803,6 @@ _defineProperty(ControlledPiano, "propTypes", {
 _defineProperty(ControlledPiano, "defaultProps", {
   renderNoteLabel: function renderNoteLabel(_ref3) {
     var keyboardShortcut = _ref3.keyboardShortcut,
-        midiNumber = _ref3.midiNumber,
         isActive = _ref3.isActive,
         isAccidental = _ref3.isAccidental;
     return keyboardShortcut ? React.createElement("div", {

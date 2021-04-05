@@ -3,19 +3,6 @@ import { Card, CardBody, CardHeader, CardFooter, Row, Col, Button } from 'reacts
 import Widget from "../component/widget";
 import Instrument from "./component/instrument";
 
-const notes = [
-    [
-        {
-            note: 'a',
-            octave: 4
-        },
-        {
-            note: 'b',
-            octave: 4
-        }
-    ]
-];
-
 const ChordNotesOnInstrument = props =>{
     return <Card>
         <CardHeader>
@@ -41,7 +28,7 @@ const ChordNotesOnInstrument = props =>{
                     </Card>
                 </Col>
                 <Col md={8} sm={12}>
-                    <Instrument notes={notes} isForAnswer={true}/>
+                    <Instrument notes={[]}/>
                 </Col>
             </Row>
         </CardBody>

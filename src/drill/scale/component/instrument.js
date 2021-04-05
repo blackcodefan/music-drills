@@ -1,38 +1,108 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import { CardHeader, CardBody, Card, CardFooter, Button } from "reactstrap";
 import { AppSwitch } from '@coreui/react'
 import CustomPiano from '../../component/piano';
 import Guitar from '../../component/guitar';
-//
-// const notes = [
-//     {
-//         note: 'e3',
-//         string: 4,
-//         color: 'green'
-//     },
-//     {
-//         note: 'd#3',
-//         string: 5
-//     },
-//     {
-//         note: 'g3',
-//         string: 4,
-//     }
-// ];
+import {GuitarNoteArrangement, Notes} from "../../logic/source";
+
+const getNotes = notesInfo => {
+    let notes = [];
+    notesInfo.forEach(info =>{
+        let note = Notes[info.index];
+        let newNote = {...note,
+            note: note.note[info.noteIndex],
+            accident: note.accident[info.noteIndex] || null,
+            color: info.color || 'default',
+            readOnly: info.readOnly || false,
+            string: info.string || note.guitar[note.guitar.length - 1]
+        };
+
+        notes.push(newNote);
+    });
+    return notes;
+};
+
+const transferToGuitarFormat = notes =>{
+    let guitarNotes = [];
+    notes.forEach(note =>{
+        let guitarNote = {
+            note: `${note.note}${note.accident?note.accident:''}${note.octave - 1}`,
+            string: note.string,
+            color: note.color,
+            index: note.index,
+            readOnly: note.readOnly
+        };
+        guitarNotes.push(guitarNote);
+    });
+    return guitarNotes;
+};
 
 const Instrument = props =>{
 
-    const [piano, chooseInstrument] = useState(true);
+    const notes = getNotes(props.notes);
+    const guitar = transferToGuitarFormat(notes);
+    const [piano, chooseInstrument] = useState(false);
 
-    const playNote = miniNumber =>{
-        // if(selectedNotes.includes(miniNumber)){
-        //     selectedNotes.splice(selectedNotes.indexOf(miniNumber), 1);
-        //     selectNotes(selectedNotes);
-        // }else{
-        //     selectedNotes.push(miniNumber);
-        //     selectedNotes.sort(function(a, b){return a - b});
-        //     selectNotes(selectedNotes);
-        // }
+    const pianoStrike = miniNumber =>{
+
+        let note = Notes[miniNumber - 52];
+
+        !!props.onNoteSelect?
+            props.onNoteSelect({
+                index: miniNumber - 52,
+                noteIndex: 0,
+                color: 'black',
+                string: note.guitar[note.guitar.length - 1],
+                readOnly: false
+            })
+            :console.log('');
+    };
+
+    const onGuitarLineClick = (midiIndex, stringIndex, termIndex) =>{
+        let index;
+        if(termIndex !== -1){
+            index = GuitarNoteArrangement[midiIndex];
+
+        }else{
+
+            switch (stringIndex) {
+                case 6:
+                    index = 0;break;
+                case 5:
+                    index = 5;break;
+                case 4:
+                    index = 10;break;
+                case 3:
+                    index = 15;break;
+                case 2:
+                    index = 19;break;
+                case 1:
+                    index = 24;break;
+                default:
+                    index = 0;break;
+            }
+        }
+
+        !!props.onNoteSelect?
+            props.onNoteSelect({
+                index: index,
+                noteIndex: 0,
+                color: 'black',
+                string: stringIndex,
+                readOnly: false
+            })
+            :console.log('');
+    };
+
+    const onGuitarNoteClick = (index, string) =>{
+
+        !!props.onNoteSelect?props.onNoteSelect({
+            index: index,
+            noteIndex: 0,
+            color: 'black',
+            string: string,
+            readOnly: false
+        }):console.log('');
     };
 
     return <Card className="border-primary">
@@ -40,7 +110,7 @@ const Instrument = props =>{
             <div className="card-header-actions instrument-switcher">
                 <strong>Piano</strong>
                 <AppSwitch className={'mx-1'} color={'success'} label
-                           checked dataOn={'P'}
+                           dataOn={'P'}
                            dataOff={'G'}
                            onChange={e => chooseInstrument(e.target.checked)}/>
                 <strong>Guitar</strong>
@@ -50,14 +120,22 @@ const Instrument = props =>{
             {
                 piano?
                     <CustomPiano
-                        playNote={playNote}
+                        notes={notes}
+                        playNote={pianoStrike}
                     />:
-                    < Guitar notes={[]}/>
+                    <Guitar notes={guitar} onLineClick={onGuitarLineClick} onNoteClick={onGuitarNoteClick}/>
             }
         </CardBody>
-        {props.isForAnswer?
+        {props.onAnswer?
             <CardFooter className="text-center">
-                <Button color="primary">Answer</Button>
+                <Button color={
+                    props.answerStatus === 0?
+                        "primary":props.answerStatus === 1?
+                        "success":"danger"} onClick={props.onAnswer}>
+                    {
+                        props.answerStatus === 0?'Answer':'Next'
+                    }
+                </Button>
             </CardFooter>
             :<div />
         }
